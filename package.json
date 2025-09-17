@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node graphql/server.js",
+    "test:rest": "mocha tests/rest/**/*.test.js --timeout 5000",
+    "test:graphql": "mocha tests/graphql/**/*.test.js --timeout 5000",
+    "test": "mocha tests/**/*.test.js --timeout 5000"
   },
   "repository": {
     "type": "git",
@@ -24,5 +28,10 @@
     "graphql": "^16.11.0",
     "jsonwebtoken": "^9.0.2",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "chai": "^6.0.1",
+    "mocha": "^11.7.2",
+    "supertest": "^7.1.4"
   }
 }
