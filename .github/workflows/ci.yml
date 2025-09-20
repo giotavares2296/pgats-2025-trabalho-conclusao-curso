@@ -25,7 +25,7 @@ jobs:
       - name: Start REST API
         run: |
           nohup node rest/server.js &
-          sleep 5  # espera 5 segundos pra API subir
+          sleep 5 
 
       - name: Start GraphQL API
         run: |

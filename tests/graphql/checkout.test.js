@@ -6,7 +6,6 @@ describe('GraphQL - Checkout', () => {
   let token;
 
   before(async () => {
-    // Faz login antes para obter o token
     const loginMutation = `
       mutation Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {

@@ -17,3 +17,10 @@ npm run test:rest
 ```bash
 npm run test:graphql
 ```
+
+
+## Rode somente os testes de Controller:
+
+```bash
+npm test -- --grep "Controller"
+```
