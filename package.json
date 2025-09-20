@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start": "node graphql/server.js",
     "test:rest": "mocha tests/rest/**/*.test.js --timeout 5000",
@@ -17,7 +17,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/juliodelimas/pgats-2025-02-base/issues"
   },
@@ -30,7 +29,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "chai": "^6.0.1",
+    "chai": "^4.5.0",
     "mocha": "^11.7.2",
     "supertest": "^7.1.4"
   }
