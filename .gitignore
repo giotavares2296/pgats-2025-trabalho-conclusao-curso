@@ -1,1 +1,4 @@
 node_modules/
+
+# K6 reports
+tests/k6/reports/*.json
