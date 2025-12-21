@@ -1,7 +1,7 @@
 {
   "name": "pgats-2025-02-base",
   "version": "1.0.0",
-  "description": "",
+  "description": "Se você é aluno da Pós-Graduação em Automação de Testes de Software (Turma 2), faça um fork desse repositório e boa sorte em seu trabalho de conclusão da disciplina.",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
@@ -33,5 +33,8 @@
     "mocha": "^11.7.2",
     "sinon": "^21.0.0",
     "supertest": "^7.1.4"
+  },
+  "directories": {
+    "test": "tests"
   }
 }

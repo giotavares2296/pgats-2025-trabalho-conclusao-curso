@@ -1,4 +1,4 @@
 node_modules/
-
-# K6 reports
+.env
+tests/k6/reports/*.html
 tests/k6/reports/*.json
