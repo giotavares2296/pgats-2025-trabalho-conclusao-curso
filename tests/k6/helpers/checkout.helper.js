@@ -5,7 +5,7 @@ export function checkout(baseUrl, token, payload) {
   const params = {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 

@@ -79,6 +79,10 @@ Validar respostas com checks
 Medir métricas de tempo de resposta
 Avaliar thresholds configurados
 
+### Relatorio de Testes
+O relátorio se encontra no pasta reports > k6-report.html
+
+
 ## Conceitos Aplicados
 ### Thresholds
 Definem critérios mínimos de desempenho que o teste deve atender.
@@ -126,25 +130,20 @@ export const checkoutDuration = new Trend('checkout_duration');
 ```
 Permite acompanhar o tempo específico das requisições de checkout.
 
-### Faker
-Geração de dados dinâmicos para simular usuários diferentes.
-
-Arquivo: checkout.performance.test.js
-
-``` js
-const email = `user_${__VU}_${__ITER}@email.com`;
-```
-Evita reutilização de dados fixos durante a execução.
 
 ### Variáveis de Ambiente
-Permitem configuração externa do ambiente de execução.
+Os testes de performance utilizam variáveis de ambiente para evitar dados sensíveis no código
+e garantir maior flexibilidade de execução em diferentes ambientes.
 
-Arquivo: checkout.performance.test.js
+As seguintes variáveis devem ser configuradas antes da execução:
 
-``` js
-const BASE_URL = __ENV.BASE_URL || 'http://localhost:3000';
+```env
+BASE_URL=http://localhost:3000
+TOKEN_JWT=cole_o_token_jwt_aqui
 ```
-Possibilita executar o teste em diferentes ambientes sem alterar o código.
+BASE_URL: URL base da API que será testada.
+TOKEN_JWT: Token de autenticação obtido previamente via login na API.
+
 
 ### Stages
 Controlam a carga ao longo do tempo.
@@ -160,11 +159,7 @@ export const stages = [
 Simula rampa de subida, pico e rampa de descida de usuários.
 
 ### Reaproveitamento de Resposta
-Uso do token retornado no login para requisições subsequentes.
-
-Arquivo: helpers/auth.helper.js
-
-O token JWT obtido no login é reutilizado no checkout.
+O token JWT obtido no login é reaproveitado durante todo o teste de performance por meio de variável de ambiente, evitando execuções repetidas do endpoint de autenticação sob carga
 
 ### Uso de Token de Autenticação
 Autenticação via JWT no endpoint de checkout.
