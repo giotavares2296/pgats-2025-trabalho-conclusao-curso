@@ -5,7 +5,7 @@ O objetivo é validar desempenho, estabilidade e regras de negócio do fluxo de 
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 tests/k6/
 ├── config/
@@ -22,41 +22,62 @@ tests/k6/
 │ └── checkout.performance.test.js
 └── README.md
 
-yaml
-Copiar código
-
 ---
 
 ## Como Executar os Testes
 
-### Criar a pasta de relatórios (caso não exista)
+### Subir a API REST
+Antes de executar qualquer teste de performance, é necessário que a API esteja em execução, pois o K6 irá realizar chamadas HTTP reais contra os endpoints.
+Na raiz do projeto, execute:
 ```bash
-mkdir -p tests/k6/reports
+node rest/server.js
+```
+### Registrar um usuário (execução única)
+O endpoint de checkout exige autenticação via token JWT.
+Por esse motivo, é necessário registrar previamente um usuário na API.
+
+Em um novo terminal, execute:
+```bash
+curl -X POST http://localhost:3000/api/users/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Usuario Performance","email":"perf@test.com","password":"senha123"}'
 ```
 
-### Executar o teste de performance e gerar o resultado em JSON
-``` bash
-k6 run tests/k6/tests/checkout.performance.test.js \
-  --out json=tests/k6/reports/resultado.json
+### Realizar login e obter o token JWT
+Após o registro, é necessário realizar o login para obter o token JWT, que será utilizado para autenticação no teste de checkout.
+```bash
+curl -X POST http://localhost:3000/api/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"perf@test.com","password":"senha123"}'
 ```
-### Gerar o relatório em HTML
-``` bash
-npx k6-html-reporter tests/k6/reports/resultado.json \
-  -o tests/k6/reports/k6-report.html
-``` 
-### Relatório de Execução
-O relatório de execução do teste encontra-se em:
 
-``` bash
-tests/k6/reports/k6-report.html
-``` 
-O relatório apresenta métricas como:
-Tempo de resposta
-Percentis
-Taxa de falhas
-Checks
-Thresholds
-Grupos de execução
+### Configurar variáveis de ambiente
+As configurações sensíveis do teste, como a URL da API e o token JWT, são definidas através de variáveis de ambiente.
+
+Crie um arquivo .env na raiz do projeto com o seguinte conteúdo:
+```env
+BASE_URL=http://localhost:3000
+TOKEN_JWT=cole_o_token_aqui
+```
+
+Em seguida, exporte as variáveis para o ambiente de execução:
+```bash
+export $(grep -v '^#' .env | xargs)
+```
+
+Essas variáveis são acessadas no código de teste por meio do objeto __ENV do K6, garantindo maior segurança e flexibilidade.
+
+### Executar o teste de performance
+Com a API em execução e as variáveis de ambiente configuradas, execute o teste de performance:
+```bash
+k6 run tests/k6/tests/checkout.performance.test.js
+```
+Durante a execução, o K6 irá:
+Simular múltiplos usuários virtuais (VUs)
+Executar o endpoint de checkout sob carga
+Validar respostas com checks
+Medir métricas de tempo de resposta
+Avaliar thresholds configurados
 
 ## Conceitos Aplicados
 ### Thresholds
