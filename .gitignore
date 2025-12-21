@@ -1,4 +1,6 @@
 node_modules/
+# Relatórios e saídas do K6
+*.json
+tests/k6/reports/*
+resultado.json
 .env
-tests/k6/reports/*.html
-tests/k6/reports/*.json
