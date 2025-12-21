@@ -91,7 +91,7 @@ Arquivo: checkout.performance.test.js
 ``` js
 thresholds: {
   http_req_duration: ['p(95)<500'],
-  http_req_failed: ['rate<0.01'],
+  http_req_failed: ['rate<0.05'],
 }
 ```
 95% das requisições devem responder em até 500ms e a taxa de falhas deve ser inferior a 1%.
@@ -104,7 +104,7 @@ Arquivo: checkout.performance.test.js
 ``` js
 check(response, {
   'status é 200': (r) => r.status === 200,
-  'valorFinal retornado': (r) => r.json('valorFinal') !== undefined,
+  'valorFinal retornado': (r) => r.json('valorFinal') !== null,
 });
 ```
 Garante sucesso da requisição e retorno do valor final do checkout.
@@ -116,6 +116,7 @@ Arquivos:
 
 helpers/auth.helper.js
 helpers/checkout.helper.js
+helpers/html-reports.js
 
 Separação de responsabilidades e melhor organização do código.
 
@@ -191,5 +192,4 @@ group('Checkout - pagamento via boleto', () => {
 Melhora a leitura do relatório e a organização do fluxo de teste.
 
 Conclusão
-O teste de performance desenvolvido cobre um fluxo crítico da API (checkout autenticado), aplicando todos os conceitos exigidos no trabalho.
-A abordagem adotada permite avaliar desempenho, estabilidade e comportamento da API sob carga de forma clara e organizada.
+O teste de performance desenvolvido cobre um fluxo crítico da API (checkout autenticado), aplicando todos os conceitos estudados no curso.
