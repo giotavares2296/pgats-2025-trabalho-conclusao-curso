@@ -27,161 +27,153 @@ Copiar código
 
 ---
 
-## 🚀 Como Executar os Testes
+## Como Executar os Testes
 
-### 1️⃣ Criar a pasta de relatórios (caso não exista)
+### Criar a pasta de relatórios (caso não exista)
 ```bash
 mkdir -p tests/k6/reports
-2️⃣ Executar o teste de performance e gerar o resultado em JSON
-bash
-Copiar código
+```
+
+### Executar o teste de performance e gerar o resultado em JSON
+``` bash
 k6 run tests/k6/tests/checkout.performance.test.js \
   --out json=tests/k6/reports/resultado.json
-3️⃣ Gerar o relatório em HTML
-bash
-Copiar código
+```
+### Gerar o relatório em HTML
+``` bash
 npx k6-html-reporter tests/k6/reports/resultado.json \
   -o tests/k6/reports/k6-report.html
-📊 Relatório de Execução
+``` 
+### Relatório de Execução
 O relatório de execução do teste encontra-se em:
 
-bash
-Copiar código
+``` bash
 tests/k6/reports/k6-report.html
+``` 
 O relatório apresenta métricas como:
-
 Tempo de resposta
-
 Percentis
-
 Taxa de falhas
-
 Checks
-
 Thresholds
-
 Grupos de execução
 
-🧠 Conceitos Aplicados
-✅ Thresholds
+## Conceitos Aplicados
+### Thresholds
 Definem critérios mínimos de desempenho que o teste deve atender.
+Arquivo: checkout.performance.test.js
 
-📌 Arquivo: checkout.performance.test.js
-
-js
-Copiar código
+``` js
 thresholds: {
   http_req_duration: ['p(95)<500'],
   http_req_failed: ['rate<0.01'],
 }
-📖 95% das requisições devem responder em até 500ms e a taxa de falhas deve ser inferior a 1%.
+```
+95% das requisições devem responder em até 500ms e a taxa de falhas deve ser inferior a 1%.
 
-✅ Checks
+### Checks
 Validam se a resposta da API está correta.
 
-📌 Arquivo: checkout.performance.test.js
+Arquivo: checkout.performance.test.js
 
-js
-Copiar código
+``` js
 check(response, {
   'status é 200': (r) => r.status === 200,
   'valorFinal retornado': (r) => r.json('valorFinal') !== undefined,
 });
-📖 Garante sucesso da requisição e retorno do valor final do checkout.
+```
+Garante sucesso da requisição e retorno do valor final do checkout.
 
-✅ Helpers
+### Helpers
 Centralizam e reutilizam lógica comum.
 
-📌 Arquivos:
+Arquivos:
 
 helpers/auth.helper.js
-
 helpers/checkout.helper.js
 
-📖 Separação de responsabilidades e melhor organização do código.
+Separação de responsabilidades e melhor organização do código.
 
-✅ Trends
+### Trends
 Métricas customizadas para análise de performance.
 
-📌 Arquivo: checkout.performance.test.js
+Arquivo: checkout.performance.test.js
 
-js
-Copiar código
+``` js
 import { Trend } from 'k6/metrics';
-
 export const checkoutDuration = new Trend('checkout_duration');
-📖 Permite acompanhar o tempo específico das requisições de checkout.
+```
+Permite acompanhar o tempo específico das requisições de checkout.
 
-✅ Faker
+### Faker
 Geração de dados dinâmicos para simular usuários diferentes.
 
-📌 Arquivo: checkout.performance.test.js
+Arquivo: checkout.performance.test.js
 
-js
-Copiar código
+``` js
 const email = `user_${__VU}_${__ITER}@email.com`;
-📖 Evita reutilização de dados fixos durante a execução.
+```
+Evita reutilização de dados fixos durante a execução.
 
-✅ Variáveis de Ambiente
+### Variáveis de Ambiente
 Permitem configuração externa do ambiente de execução.
 
-📌 Arquivo: checkout.performance.test.js
+Arquivo: checkout.performance.test.js
 
-js
-Copiar código
+``` js
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:3000';
-📖 Possibilita executar o teste em diferentes ambientes sem alterar o código.
+```
+Possibilita executar o teste em diferentes ambientes sem alterar o código.
 
-✅ Stages
+### Stages
 Controlam a carga ao longo do tempo.
+Arquivo: config/stages.js
 
-📌 Arquivo: config/stages.js
-
-js
-Copiar código
+```js
 export const stages = [
   { duration: '30s', target: 5 },
   { duration: '1m', target: 10 },
   { duration: '30s', target: 0 },
 ];
-📖 Simula rampa de subida, pico e rampa de descida de usuários.
+```
+Simula rampa de subida, pico e rampa de descida de usuários.
 
-✅ Reaproveitamento de Resposta
+### Reaproveitamento de Resposta
 Uso do token retornado no login para requisições subsequentes.
 
-📌 Arquivo: helpers/auth.helper.js
+Arquivo: helpers/auth.helper.js
 
-📖 O token JWT obtido no login é reutilizado no checkout.
+O token JWT obtido no login é reutilizado no checkout.
 
-✅ Uso de Token de Autenticação
+### Uso de Token de Autenticação
 Autenticação via JWT no endpoint de checkout.
 
-📌 Arquivo: helpers/checkout.helper.js
+Arquivo: helpers/checkout.helper.js
 
-js
-Copiar código
+```js
 Authorization: `Bearer ${token}`
-📖 Garante que apenas usuários autenticados realizem checkout.
+``` 
+Garante que apenas usuários autenticados realizem checkout.
 
-✅ Data-Driven Testing
+### Data-Driven Testing
 Separação dos dados de entrada do teste.
 
-📌 Arquivo: data/checkout-data.js
+Arquivo: data/checkout-data.js
 
-📖 Facilita manutenção e variação de cenários de teste.
+Facilita manutenção e variação de cenários de teste.
 
-✅ Groups
+### Groups
 Organização do teste em blocos lógicos.
 
-📌 Arquivo: checkout.performance.test.js
+Arquivo: checkout.performance.test.js
 
-js
-Copiar código
+```js
 group('Checkout - pagamento via boleto', () => {
   // execução do checkout
 });
-📖 Melhora a leitura do relatório e a organização do fluxo de teste.
+```
+Melhora a leitura do relatório e a organização do fluxo de teste.
 
-✅ Conclusão
+Conclusão
 O teste de performance desenvolvido cobre um fluxo crítico da API (checkout autenticado), aplicando todos os conceitos exigidos no trabalho.
 A abordagem adotada permite avaliar desempenho, estabilidade e comportamento da API sob carga de forma clara e organizada.
